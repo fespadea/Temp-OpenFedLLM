@@ -36,16 +36,18 @@ else:
     dataset = get_fed_datasets(script_args.local_data_dir)
 
 # ===== Process dataset into KTO format =====
-dataset = map(
-    lambda local_dataset: Dataset.from_dict(
-        {
-            "prompt": local_dataset["prompt"] + local_dataset["prompt"],
-            "completion": local_dataset["chosen"] + local_dataset["rejected"],
-            "label": ([True] * local_dataset.num_rows)
-            + ([False] * local_dataset.num_rows),
-        }
-    ),
-    dataset,
+dataset = list(
+    map(
+        lambda local_dataset: Dataset.from_dict(
+            {
+                "prompt": local_dataset["prompt"] + local_dataset["prompt"],
+                "completion": local_dataset["chosen"] + local_dataset["rejected"],
+                "label": ([True] * local_dataset.num_rows)
+                + ([False] * local_dataset.num_rows),
+            }
+        ),
+        dataset,
+    )
 )
 
 # ===== Split the dataset into clients =====
@@ -139,7 +141,9 @@ for round in tqdm(range(fed_args.num_rounds)):
             local_datasets[client], round, fed_args, script_args, local_step
         )  # get the required sub-dataset for this round
 
-        training_args = get_kto_training_args(script_args, new_lr, local_step, sub_dataset)
+        training_args = get_kto_training_args(
+            script_args, new_lr, local_step, sub_dataset
+        )
 
         # ===== Train local model on the client side =====
         trainer = get_fed_local_kto_trainer(
