@@ -23,7 +23,7 @@ from config import get_config, save_config, get_model_config, get_kto_training_a
 
 # ===== Define the arguments =====
 script_args, fed_args, peft_config = get_config()
-training_args = get_training_args(
+training_args = get_kto_training_args(
     script_args, script_args.learning_rate, script_args.max_steps
 )
 save_config(script_args, fed_args)
