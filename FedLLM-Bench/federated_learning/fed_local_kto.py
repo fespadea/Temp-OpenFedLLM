@@ -28,7 +28,7 @@ def get_fed_local_kto_trainer(script_args, fed_args, model, model_ref, tokenizer
                             )
         trainer.add_callback(SCAFFOLD_Callback(trainer.correction, model))
     else: # such as fedavg, local0
-        trainer = KTTrainer(
+        trainer = KTOTrainer(
                             model=model,
                             ref_model=model_ref,
                             args=training_args,
