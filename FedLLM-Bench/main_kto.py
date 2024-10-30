@@ -36,7 +36,6 @@ else:
     dataset = get_fed_datasets(script_args.local_data_dir)
 
 # ===== Process dataset into KTO format =====
-print(dataset[0])
 dataset = list(
     map(
         lambda local_dataset: Dataset.from_dict(
